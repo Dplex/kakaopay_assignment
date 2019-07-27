@@ -39,7 +39,9 @@ class FinanceDatasource {
             it.setJpaPropertyMap(
                     HashMap<String, Any>().also { map ->
 //                        map.put("hibernate.hbm2ddl.auto", "true")
-                        map.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
+                        map.put("hibernate.temp.use_jdbc_metadata_defaults", false)
+                        map.put("hibernate.jdbc.lob.non_contextual_creation", true)
+                        map.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect")
                     })
         }
     }

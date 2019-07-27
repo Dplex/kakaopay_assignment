@@ -12,9 +12,16 @@ group = "com.kakaopay"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
+val developmentOnly by configurations.creating
+configurations {
+	runtimeClasspath {
+		extendsFrom(developmentOnly)
+	}
+}
+
 repositories {
 	mavenCentral()
-	maven { url = uri("https://repo.spring.io/milestone") }
+//	maven { url = uri("https://repo.spring.io/milestone") }
 }
 
 dependencies {
@@ -25,11 +32,13 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	runtimeOnly("org.postgresql:postgresql")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-		exclude(group = "junit", module = "junit")
+//		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
 }
 
 tasks.withType<Test> {
