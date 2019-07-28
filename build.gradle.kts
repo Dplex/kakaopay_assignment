@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 //	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -39,6 +39,9 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+	implementation("org.mybatis:mybatis:3.5.2")
+	implementation("org.mybatis:mybatis-spring:2.0.2")
+	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 }
 
 tasks.withType<Test> {

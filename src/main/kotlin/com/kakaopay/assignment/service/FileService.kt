@@ -30,7 +30,7 @@ class FileService {
                 val year = rowLst[0].toInt()
                 val month = rowLst[1].toInt()
                 for ((idx, value) in bankLst.withIndex()) {
-                    financeLst.add(FinanceVo(null, year.toInt(), month.toInt(), value.bankCode, rowLst[idx + 2].toInt()))
+                    financeLst.add(FinanceVo(year.toInt(), month.toInt(), value.bankCode, rowLst[idx + 2].toInt()))
                 }
             }
             financeLst

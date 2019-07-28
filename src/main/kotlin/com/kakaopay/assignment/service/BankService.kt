@@ -1,7 +1,7 @@
 package com.kakaopay.assignment.service
 
 import com.kakaopay.assignment.const.ResponseType
-import com.kakaopay.assignment.repo.BankRepository
+import com.kakaopay.assignment.repo.mapper.BankMapper
 import com.kakaopay.assignment.rest.response.Bank
 import com.kakaopay.assignment.rest.response.BanksResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,12 +11,11 @@ import kotlin.streams.toList
 
 @Service
 class BankService(
-        @Autowired val bankRepository: BankRepository
+        @Autowired val bankMapper: BankMapper
 
 ) {
     fun getAllBanks(): ResponseEntity<BanksResponse> {
-
-        val items = bankRepository.findAll()
+        val items = bankMapper.findAll()
         val bankLst = items.stream().map {
             Bank(it.bankCode, it.bankName)
         }.toList()
