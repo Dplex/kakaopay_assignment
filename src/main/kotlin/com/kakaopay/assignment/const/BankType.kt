@@ -9,5 +9,11 @@ enum class BankType(val bankName: String, val bankCode: String) {
     HANA("하나은행", "06"),
     NH_SH("농협은행/수협은행", "07"),
     KEB("외환은행", "08"),
-    ETC("기타은행", "98")
+    ETC("기타은행", "98");
+
+    companion object {
+        fun getBankTypeLst(): List<BankType>
+                = listOf(HOUSE_FUND, KUKMIN, WOORI, SHINHAN, CITI, HANA, NH_SH, KEB, ETC)
+    }
 }
+

@@ -7,7 +7,7 @@ import javax.persistence.*
 @Table(name = "tasur_hist", schema = "kakao_finance_be")
 data class FinanceVo(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")
         val ID: Int?,
 

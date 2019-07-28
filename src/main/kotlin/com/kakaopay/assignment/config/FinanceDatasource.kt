@@ -1,5 +1,6 @@
 package com.kakaopay.assignment.config
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -17,14 +18,14 @@ import javax.sql.DataSource
         entityManagerFactoryRef = "financeEntityManager",
         transactionManagerRef = "financeTransactionManager"
 )
-class FinanceDatasource {
+class FinanceDatasource(@Autowired val financeConfig: FinanceConfig) {
     @Primary
     @Bean
     fun dataSource(): DataSource {
         return DriverManagerDataSource().also {
-            it.url = "jdbc:postgresql://localhost:25432/kakaofinance"
-            it.username = "kakaoapp"
-            it.password = "!q2w3e4r"
+            it.url = financeConfig.dbUrl
+            it.username = financeConfig.dbUser
+            it.password = financeConfig.dbPassword
         }
     }
 

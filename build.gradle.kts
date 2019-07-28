@@ -21,7 +21,7 @@ configurations {
 
 repositories {
 	mavenCentral()
-//	maven { url = uri("https://repo.spring.io/milestone") }
+	maven { url = uri("https://repo.spring.io/milestone") }
 }
 
 dependencies {
@@ -34,7 +34,7 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-//		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	testImplementation("org.springframework.security:spring-security-test")

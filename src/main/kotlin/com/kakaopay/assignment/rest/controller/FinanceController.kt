@@ -2,6 +2,7 @@ package com.kakaopay.assignment.rest.controller
 
 import com.kakaopay.assignment.const.Contant
 import com.kakaopay.assignment.service.FileService
+import com.kakaopay.assignment.service.FinanceService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
 import org.springframework.http.ResponseEntity
@@ -17,18 +18,19 @@ import java.nio.charset.Charset
 
 @RestController
 class FinanceController(
-        @Autowired val fileService: FileService
+        @Autowired val fileService: FileService,
+        @Autowired val financeService: FinanceService
+
 ) {
 
     @PostMapping("/uploadHistory")
     @ResponseBody
     fun uploadHistoryFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
         var historyLst = fileService.parseCsvToStringLst(file)
-        historyLst.removeAt(Contant.CSV_HEADER_IDX)
 
+        var financeLst = fileService.convertFinanceVoLst(historyLst)
 
-
-//        fileService.uploadCSVFile(file)
+        financeService.saveFinaceLst(financeLst)
 
         return ResponseEntity.ok(historyLst.size.toString())
     }
