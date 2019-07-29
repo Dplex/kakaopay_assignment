@@ -11,6 +11,7 @@ import com.kakaopay.assignment.rest.response.BankStatisticsResponse
 import com.kakaopay.assignment.rest.response.FinanceStatisticsResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import kotlin.streams.toList
 
@@ -27,6 +28,7 @@ class FinanceService(
         return ResponseEntity.ok("1")
     }
 
+    @Async
     fun saveFinaceLst(financeLst: List<FinanceVo>) {
         if (financeConfig.configuration.removeOldHistory) {
             financeMapper.deleteAll()

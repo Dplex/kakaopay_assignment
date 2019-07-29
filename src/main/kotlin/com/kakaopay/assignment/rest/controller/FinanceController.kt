@@ -1,12 +1,15 @@
 package com.kakaopay.assignment.rest.controller
 
 import com.kakaopay.assignment.config.FinanceConfig
+import com.kakaopay.assignment.const.PreditionType
 import com.kakaopay.assignment.const.UNKNOWN_CODE
 import com.kakaopay.assignment.rest.response.BankStatistics
 import com.kakaopay.assignment.rest.response.BankStatisticsResponse
 import com.kakaopay.assignment.rest.response.FinanceStatisticsResponse
+import com.kakaopay.assignment.rest.response.PredictionResponse
 import com.kakaopay.assignment.service.FileService
 import com.kakaopay.assignment.service.FinanceService
+import com.kakaopay.assignment.service.PredictionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile
 class FinanceController(
         @Autowired val fileService: FileService,
         @Autowired val financeService: FinanceService,
+        @Autowired val predictionService: PredictionService,
         @Autowired val financeConfig: FinanceConfig
-
 ) {
 
     @PostMapping("/uploadHistory")
@@ -50,7 +53,19 @@ class FinanceController(
     fun getAverageMinMax(@RequestParam("code", required = false, defaultValue = UNKNOWN_CODE) _code: String)
             : ResponseEntity<BankStatisticsResponse> {
         var code = _code
-        if (code == UNKNOWN_CODE) code = financeConfig.configuration.API_MIN_MAX_DEFAULT_CODE
+        if (code == UNKNOWN_CODE) code = financeConfig.configuration.api_minmax_default_code
         return financeService.getAverageMinMax(code)
+    }
+
+    @GetMapping("/prediction")
+    @ResponseBody
+    fun predict(
+            @RequestParam("code", required = true) code: String,
+            @RequestParam("month", required = true) month: Int,
+            @RequestParam("mode", required = false, defaultValue = PreditionType.STATISTIC) mode: String
+    ) : ResponseEntity<PredictionResponse> {
+
+        return predictionService.predict(code, month, mode)
+
     }
 }

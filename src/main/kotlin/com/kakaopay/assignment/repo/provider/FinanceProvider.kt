@@ -44,12 +44,20 @@ class FinanceProvider {
                 .toString()
     }
 
+    fun getAll(): String {
+        return SQL()
+                .SELECT("year", "month", "bank_type bankType", "asur_price assurancePrice")
+                .FROM(HISTORY_TABLE)
+                .toString()
+    }
+
     companion object {
         const val HISTORY_TABLE = "kakao_finance_be.tasur_hist"
         const val METHOD_DELETEALL = "deleteAll"
         const val METHOD_INSERT_OR_UPDATE = "insertOrUpdate"
         const val METHOD_GET_SUMMERIZE = "getSummerize"
         const val METHOD_GET_LARGEST = "getLargest"
+        const val METHOD_GET_ALL = "getAll"
     }
 
 }

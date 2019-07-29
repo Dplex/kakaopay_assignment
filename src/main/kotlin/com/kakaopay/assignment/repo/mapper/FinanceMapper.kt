@@ -21,4 +21,8 @@ interface FinanceMapper {
 
     @SelectProvider(type = FinanceProvider::class, method = FinanceProvider.METHOD_GET_LARGEST)
     fun getLargest(@Param("code") bankType: String): FinanceStatistcsVo
+
+    @SelectProvider(type = FinanceProvider::class, method = FinanceProvider.METHOD_GET_ALL)
+    fun getAll(): List<FinanceVo>
+
 }
