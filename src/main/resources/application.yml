@@ -1,16 +1,35 @@
+server:
+  tomcat:
+    basedir: /log
+    accesslog:
+      directory: /
+      enabled: true
+      pattern: "\"%t\" \"%{X-Forwarded-For}i\" \"%I\" \"%D\" \"%r\" \"%s\" \"%b\" "
+      prefix: access
+      suffix: .log
+      file-date-format: .yyyy-MM-dd
+      rotate: true
+      rename-on-rotate: true
+
+logging:
+  level:
+    com.zaxxer.hikari: INFO
+  file:
+    path: /log
+
+---
 spring:
   profiles:
     active: local
   jpa:
     show-sql: true
 
-
 database:
   url: jdbc:postgresql://localhost:25432/kakaofinance
   username: kakaoapp
-  password: '!q2w3e4r'
+  encPassword: 'WqtXLBNux+I7xZo6A12oqGko9JjckYyQ'
 
-
+secretKey: "/CipherSecretKey"
 
 ---
 spring:
