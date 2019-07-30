@@ -42,6 +42,7 @@ dependencies {
 	implementation("org.mybatis:mybatis:3.5.2")
 	implementation("org.mybatis:mybatis-spring:2.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+	implementation("org.codehaus.janino:janino:3.0.12")
 }
 
 tasks.withType<Test> {
