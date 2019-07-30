@@ -13,17 +13,14 @@ import java.util.*
 import kotlin.experimental.and
 
 
-@Component
-class CipherUtil {
-
-    @Value("\${secretKey:/CipherSecretKey}")
-    val key: String?= "/CipherSecretKey"
+class CipherUtil(val key: String) {
 
     lateinit var cipher: Cipher
     lateinit var keySpec: SecretKeySpec
     lateinit var gcmSpec: GCMParameterSpec
     lateinit var encoder: Base64.Encoder
     lateinit var decoder: Base64.Decoder
+
     init {
         cipher = Cipher.getInstance("AES/GCM/NoPadding")
         keySpec = SecretKeySpec(key!!.toByteArray(), "AES")
@@ -42,13 +39,4 @@ class CipherUtil {
         cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec)
         return cipher.doFinal(decoder.decode(text.toByteArray(Charset.defaultCharset()))).toString(Charset.defaultCharset())
     }
-}
-
-fun main() {
-    val cipherUtil = CipherUtil()
-
-    val pw = cipherUtil.encryptCbc("!q2w3e4r".toByteArray(Charset.defaultCharset()))
-    println(pw.toString(Charset.defaultCharset()))
-    val plain = cipherUtil.decrypteCbc(pw.toString(Charset.defaultCharset()))
-    println(plain)
 }

@@ -26,7 +26,7 @@ repositories {
 
 dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -36,6 +36,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 	}
+
+	implementation("javax.xml.bind:jaxb-api:2.3.0")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 //	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
@@ -43,6 +46,7 @@ dependencies {
 	implementation("org.mybatis:mybatis-spring:2.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.codehaus.janino:janino:3.0.12")
+	implementation("io.jsonwebtoken:jjwt:0.9.1")
 }
 
 tasks.withType<Test> {

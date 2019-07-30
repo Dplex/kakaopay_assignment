@@ -10,7 +10,7 @@ import java.io.InputStreamReader
 import javax.annotation.PostConstruct
 
 @Component
-class FinanceConfig(@Autowired val cipherUtil: CipherUtil) {
+class FinanceConfig() {
 
     @Value("\${config.location:classpath:config.json}")
     val configResouce: Resource?= null
@@ -26,6 +26,9 @@ class FinanceConfig(@Autowired val cipherUtil: CipherUtil) {
     @Value("\${database.encPassword}")
     lateinit var encDbPassword: String
 
+    @Value("\${secretKey}")
+    lateinit var secretKey: String
+
     lateinit var dbPassword: String
 
     @PostConstruct
@@ -33,7 +36,7 @@ class FinanceConfig(@Autowired val cipherUtil: CipherUtil) {
         if (configResouce == null) {
             throw Exception("config location error")
         } else {
-            dbPassword = cipherUtil.decrypteCbc(encDbPassword)
+            dbPassword = CipherUtil(secretKey).decrypteCbc(encDbPassword)
             reload()
 
         }

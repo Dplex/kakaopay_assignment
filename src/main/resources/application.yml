@@ -17,6 +17,9 @@ logging:
   file:
     path: /log
 
+jwt.secret: dplexdplex
+secretKey: "/CipherSecretKey"
+
 ---
 spring:
   profiles:
