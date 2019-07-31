@@ -11,3 +11,8 @@ abstract class APIResponse(val message: String, val code: String) {
         this.status = responseType.resultStatus
     }
 }
+
+data class SimpleResponse(
+    @JsonIgnore
+    val responseType: ResponseType
+) : APIResponse(responseType)

@@ -13,42 +13,46 @@ class FinanceProvider {
 
     fun insertOrUpdate(@Param("vo") vo: FinanceVo): String {
         return SQL()
-                .INSERT_INTO(HISTORY_TABLE)
-                .INTO_COLUMNS("year", "month", "bank_type", "asur_price")
-                .INTO_VALUES("#{vo.year}", "#{vo.month}", "#{vo.bankType}", "#{vo.assurancePrice}")
-                .toString() +
-                "ON CONFLICT ON CONSTRAINT tasure_hist_uq01 " +
-                "DO UPDATE " +
-                "SET asur_price = #{vo.assurancePrice}"
+            .INSERT_INTO(HISTORY_TABLE)
+            .INTO_COLUMNS("year", "month", "bank_type", "asur_price")
+            .INTO_VALUES("#{vo.year}", "#{vo.month}", "#{vo.bankType}", "#{vo.assurancePrice}")
+            .toString() +
+            "ON CONFLICT ON CONSTRAINT tasure_hist_uq01 " +
+            "DO UPDATE " +
+            "SET asur_price = #{vo.assurancePrice}"
     }
 
     fun getSummerize(@Param("code") bankType: String): String {
         return SQL()
-                .SELECT("year", "bnk_nm bankName", "sum(asur_price) totalPrice")
-                .FROM("$HISTORY_TABLE hist")
-                .JOIN("${BankProvider.BANK_TABLE} bank ON hist.bank_type = bank.bnk_cd" +
-                        if (bankType != UNKNOWN_CODE) " AND bank.bnk_cd = #{code}" else "")
-                .GROUP_BY("year", "bankName")
-                .toString()
+            .SELECT("year", "bnk_nm bankName", "sum(asur_price) totalPrice")
+            .FROM("$HISTORY_TABLE hist")
+            .JOIN(
+                "${BankProvider.BANK_TABLE} bank ON hist.bank_type = bank.bnk_cd" +
+                    if (bankType != UNKNOWN_CODE) " AND bank.bnk_cd = #{code}" else ""
+            )
+            .GROUP_BY("year", "bankName")
+            .toString()
     }
 
     fun getLargest(@Param("code") bankType: String): String {
         return SQL()
-                .SELECT("year", "bnk_nm bankName", "sum(asur_price) totalPrice")
-                .FROM("$HISTORY_TABLE hist")
-                .JOIN("${BankProvider.BANK_TABLE} bank ON hist.bank_type = bank.bnk_cd" +
-                        if (bankType != UNKNOWN_CODE) " AND bank.bnk_cd = #{code}" else "")
-                .GROUP_BY("year", "bankName")
-                .ORDER_BY("totalPrice desc")
-                .LIMIT(1)
-                .toString()
+            .SELECT("year", "bnk_nm bankName", "sum(asur_price) totalPrice")
+            .FROM("$HISTORY_TABLE hist")
+            .JOIN(
+                "${BankProvider.BANK_TABLE} bank ON hist.bank_type = bank.bnk_cd" +
+                    if (bankType != UNKNOWN_CODE) " AND bank.bnk_cd = #{code}" else ""
+            )
+            .GROUP_BY("year", "bankName")
+            .ORDER_BY("totalPrice desc")
+            .LIMIT(1)
+            .toString()
     }
 
     fun getAll(): String {
         return SQL()
-                .SELECT("year", "month", "bank_type bankType", "asur_price assurancePrice")
-                .FROM(HISTORY_TABLE)
-                .toString()
+            .SELECT("year", "month", "bank_type bankType", "asur_price assurancePrice")
+            .FROM(HISTORY_TABLE)
+            .toString()
     }
 
     companion object {
@@ -59,5 +63,4 @@ class FinanceProvider {
         const val METHOD_GET_LARGEST = "getLargest"
         const val METHOD_GET_ALL = "getAll"
     }
-
 }

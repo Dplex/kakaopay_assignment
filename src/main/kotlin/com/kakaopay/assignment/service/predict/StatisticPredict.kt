@@ -37,24 +37,28 @@ class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
         val seasonPrediction = getSeasonAverage()
         val piePercentagePrediction = getPieAverage()
 
-        val predictionPrice = ((eachYearPrediction * predictionWeight[0]) +
+        val predictionPrice = (
+            (eachYearPrediction * predictionWeight[0]) +
                 (seasonPrediction * predictionWeight[1]) +
-                (piePercentagePrediction * predictionWeight[2])) / predictionWeight.sum()
+                (piePercentagePrediction * predictionWeight[2])
+            ) / predictionWeight.sum()
 
-        return PredictionResponse(BankType.getBankName(bankCode),
-                financeConfig.configuration.predictionTargetYear,
-                month,
-                predictionPrice.toInt(),
-                ResponseType.KAKAO_SUCCESS)
+        return PredictionResponse(
+            BankType.getBankName(bankCode),
+            financeConfig.configuration.predictionTargetYear,
+            month,
+            predictionPrice.toInt(),
+            ResponseType.KAKAO_SUCCESS
+        )
     }
 
     private fun getPieAverage(): Double {
         val wholePie = financeLst.filter { targetYear - it.year <= yearDuration }
-                .groupBy { it.year }
-                .mapValues { it.value.sumBy { vo -> vo.assurancePrice } }
-        val bankPie = financeLst.filter { it.bankType == bankCode && targetYear - it.year <= yearDuration}
-                .groupBy { it.year }
-                .mapValues { it.value.sumBy { vo -> vo.assurancePrice } }
+            .groupBy { it.year }
+            .mapValues { it.value.sumBy { vo -> vo.assurancePrice } }
+        val bankPie = financeLst.filter { it.bankType == bankCode && targetYear - it.year <= yearDuration }
+            .groupBy { it.year }
+            .mapValues { it.value.sumBy { vo -> vo.assurancePrice } }
 
         val averagePie = wholePie.toMutableMap().map {
             (bankPie.getOrDefault(it.key, 1) / (it.value * 1.0) * 100).toInt()
@@ -65,27 +69,26 @@ class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
         val predictionPie = getWeightAverageByLast(wholePie.map { it.value }.toList(), piePercentageDeltaValues)
 
         return predictionPie * predictionPiePercentage / 12
-
     }
 
     private fun getSeasonAverage(): Double {
         val seasonMonthLst = financeConfig.configuration.predictionSeasonMonthLst.first { it -> it.contains(month) }
         val seasonPrice = financeLst
-                .filter { vo ->
-                    vo.bankType == bankCode && targetYear - vo.year <= yearDuration && seasonMonthLst.contains(vo.month)
-                }
-                .groupBy(FinanceVo::year).mapValues { entry -> entry.value.sumBy { it.assurancePrice }.div(entry.value.size) }
-                .toList().sortedBy { it.first }.map { it.second }
+            .filter { vo ->
+                vo.bankType == bankCode && targetYear - vo.year <= yearDuration && seasonMonthLst.contains(vo.month)
+            }
+            .groupBy(FinanceVo::year).mapValues { entry -> entry.value.sumBy { it.assurancePrice }.div(entry.value.size) }
+            .toList().sortedBy { it.first }.map { it.second }
 
         return getWeightAverageByLast(seasonPrice.toList(), seasonDeltaValues)
     }
 
     private fun getEachYearAverage(): Double {
         val eachYearPrice = financeLst
-                .filter { vo ->
-                    vo.bankType == bankCode && targetYear - vo.year <= yearDuration && vo.month == month
-                }
-                .sortedBy { it.year }.map { it.assurancePrice }
+            .filter { vo ->
+                vo.bankType == bankCode && targetYear - vo.year <= yearDuration && vo.month == month
+            }
+            .sortedBy { it.year }.map { it.assurancePrice }
         print(eachYearPrice)
         return getWeightAverageByLast(eachYearPrice.toList(), averageDeltaValues)
     }
@@ -102,5 +105,4 @@ class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
 
         return priceLst.last() * deltaValue
     }
-
 }

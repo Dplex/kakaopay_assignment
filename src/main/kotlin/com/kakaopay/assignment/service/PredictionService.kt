@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class PredictionService(
-        @Autowired val financeConfig: FinanceConfig,
-        @Autowired val financeMapper: FinanceMapper
+    @Autowired val financeConfig: FinanceConfig,
+    @Autowired val financeMapper: FinanceMapper
 
 ) {
 
@@ -23,6 +23,4 @@ class PredictionService(
             return ResponseEntity.ok(this.predict(bankCode, month, historyLst))
         }
     }
-
-
 }

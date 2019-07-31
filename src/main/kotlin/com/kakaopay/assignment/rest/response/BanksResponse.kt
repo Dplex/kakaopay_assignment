@@ -7,6 +7,6 @@ data class BanksResponse(
     val bankList: List<Bank>,
     @JsonIgnore
     val responseType: ResponseType
-): APIResponse(responseType)
+) : APIResponse(responseType)
 
 data class Bank(val bankCode: String, val bankName: String)

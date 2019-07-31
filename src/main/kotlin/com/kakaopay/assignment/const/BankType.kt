@@ -15,11 +15,10 @@ enum class BankType(val bankName: String, val bankCode: String) {
     UNKNOWN("unknown", UNKNOWN_CODE);
 
     companion object {
-        fun getBankTypeLst(): List<BankType>
-                = listOf(HOUSE_FUND, KUKMIN, WOORI, SHINHAN, CITI, HANA, NH_SH, KEB, ETC)
+        fun getBankTypeLst(): List<BankType> =
+            listOf(HOUSE_FUND, KUKMIN, WOORI, SHINHAN, CITI, HANA, NH_SH, KEB, ETC)
         fun getBankName(bankCode: String): String {
             return getBankTypeLst().find { it.bankCode == bankCode }?.bankName ?: UNKNOWN.bankName
         }
     }
 }
-

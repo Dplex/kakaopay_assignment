@@ -24,5 +24,4 @@ interface FinanceMapper {
 
     @SelectProvider(type = FinanceProvider::class, method = FinanceProvider.METHOD_GET_ALL)
     fun getAll(): List<FinanceVo>
-
 }

@@ -15,12 +15,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
-@RestController
+@RestController()
+@RequestMapping("/api/v1")
 class FinanceController(
-        @Autowired val fileService: FileService,
-        @Autowired val financeService: FinanceService,
-        @Autowired val predictionService: PredictionService,
-        @Autowired val financeConfig: FinanceConfig
+    @Autowired val fileService: FileService,
+    @Autowired val financeService: FinanceService,
+    @Autowired val predictionService: PredictionService,
+    @Autowired val financeConfig: FinanceConfig
 ) {
 
     @PostMapping("/uploadHistory")
@@ -35,7 +36,7 @@ class FinanceController(
         return ResponseEntity.ok(historyLst.size.toString())
     }
 
-    @GetMapping("/statistics/summerize")
+    @GetMapping("/statistics/summarize")
     @ResponseBody
     fun getSummerize(): ResponseEntity<FinanceStatisticsResponse> {
         return financeService.getSummerize()
@@ -43,15 +44,15 @@ class FinanceController(
 
     @GetMapping("/statistics/largest")
     @ResponseBody
-    fun getLargest(@RequestParam("code", required = false, defaultValue = UNKNOWN_CODE) code: String)
-            : ResponseEntity<BankStatistics>{
+    fun getLargest(@RequestParam("code", required = false, defaultValue = UNKNOWN_CODE) code: String):
+    ResponseEntity<BankStatistics> {
         return financeService.getLargest(code)
     }
 
     @GetMapping("/statistics/minmax")
     @ResponseBody
-    fun getAverageMinMax(@RequestParam("code", required = false, defaultValue = UNKNOWN_CODE) _code: String)
-            : ResponseEntity<BankStatisticsResponse> {
+    fun getAverageMinMax(@RequestParam("code", required = false, defaultValue = UNKNOWN_CODE) _code: String):
+    ResponseEntity<BankStatisticsResponse> {
         var code = _code
         if (code == UNKNOWN_CODE) code = financeConfig.configuration.api_minmax_default_code
         return financeService.getAverageMinMax(code)
@@ -60,12 +61,11 @@ class FinanceController(
     @GetMapping("/prediction")
     @ResponseBody
     fun predict(
-            @RequestParam("code", required = true) code: String,
-            @RequestParam("month", required = true) month: Int,
-            @RequestParam("mode", required = false, defaultValue = PreditionType.STATISTIC) mode: String
-    ) : ResponseEntity<PredictionResponse> {
+        @RequestParam("code", required = true) code: String,
+        @RequestParam("month", required = true) month: Int,
+        @RequestParam("mode", required = false, defaultValue = PreditionType.STATISTIC) mode: String
+    ): ResponseEntity<PredictionResponse> {
 
         return predictionService.predict(code, month, mode)
-
     }
 }

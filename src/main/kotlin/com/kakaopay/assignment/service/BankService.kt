@@ -4,14 +4,14 @@ import com.kakaopay.assignment.const.ResponseType
 import com.kakaopay.assignment.repo.mapper.BankMapper
 import com.kakaopay.assignment.rest.response.Bank
 import com.kakaopay.assignment.rest.response.BanksResponse
+import kotlin.streams.toList
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import kotlin.streams.toList
 
 @Service
 class BankService(
-        @Autowired val bankMapper: BankMapper
+    @Autowired val bankMapper: BankMapper
 
 ) {
     fun getAllBanks(): ResponseEntity<BanksResponse> {
@@ -22,5 +22,4 @@ class BankService(
 
         return ResponseEntity.ok(BanksResponse(bankLst, ResponseType.KAKAO_ACCEPTED))
     }
-
 }

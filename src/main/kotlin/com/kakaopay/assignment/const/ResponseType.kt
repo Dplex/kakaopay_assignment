@@ -4,5 +4,6 @@ import org.springframework.http.HttpStatus
 
 enum class ResponseType(val resultCode: String, val resutMessage: String, val resultStatus: HttpStatus) {
     KAKAO_SUCCESS("KA2001", "SUCEESS", HttpStatus.OK),
-    KAKAO_ACCEPTED("KA2021", "ACCEPTED", HttpStatus.ACCEPTED)
+    KAKAO_ACCEPTED("KA2021", "ACCEPTED", HttpStatus.ACCEPTED),
+    KAKAO_BAD_REQUEST("KA4001", "BAD_REQUEST", HttpStatus.BAD_REQUEST)
 }

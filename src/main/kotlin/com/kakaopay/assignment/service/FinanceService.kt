@@ -9,18 +9,18 @@ import com.kakaopay.assignment.repo.model.FinanceVo
 import com.kakaopay.assignment.rest.response.BankStatistics
 import com.kakaopay.assignment.rest.response.BankStatisticsResponse
 import com.kakaopay.assignment.rest.response.FinanceStatisticsResponse
+import kotlin.streams.toList
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
-import kotlin.streams.toList
 
 @Service
 class FinanceService(
 //        @Autowired val financeRepository: FinanceRepository,
-        @Autowired val financeMapper: FinanceMapper,
-        @Autowired val financeConfig: FinanceConfig,
-        @Autowired val financeConverter: FinanceConverter
+    @Autowired val financeMapper: FinanceMapper,
+    @Autowired val financeConfig: FinanceConfig,
+    @Autowired val financeConverter: FinanceConverter
 ) {
 
     fun test(): ResponseEntity<String> {
@@ -33,13 +33,12 @@ class FinanceService(
         if (financeConfig.configuration.removeOldHistory) {
             financeMapper.deleteAll()
         }
-        financeLst.forEach{ vo -> financeMapper.insertOrUpdate(vo) }
-
+        financeLst.forEach { vo -> financeMapper.insertOrUpdate(vo) }
     }
 
     fun getSummerize(): ResponseEntity<FinanceStatisticsResponse> {
         val summerizeLst = financeMapper.getSummerize(UNKNOWN_CODE)
-        val items = summerizeLst.groupBy{ it.year }.toList().stream().map {
+        val items = summerizeLst.groupBy { it.year }.toList().stream().map {
             financeConverter.convertTotalStatistics(it.first, it.second)
         }.toList().sortedBy { it.year as String }
         return ResponseEntity.ok(FinanceStatisticsResponse("주택금융 공급현황", items))
@@ -61,12 +60,14 @@ class FinanceService(
         statisticsVoLst.minBy { it.totalPrice }
         statisticsVoLst.maxBy { it.totalPrice }
 
-        return ResponseEntity.ok(BankStatisticsResponse(bankName, listOf(
-                financeConverter.convertBankStatistics(statisticsVoLst.minBy { it.totalPrice }!!),
-                financeConverter.convertBankStatistics(statisticsVoLst.maxBy { it.totalPrice }!!)
-        )))
-
+        return ResponseEntity.ok(
+            BankStatisticsResponse(
+                bankName,
+                listOf(
+                    financeConverter.convertBankStatistics(statisticsVoLst.minBy { it.totalPrice }!!),
+                    financeConverter.convertBankStatistics(statisticsVoLst.maxBy { it.totalPrice }!!)
+                )
+            )
+        )
     }
-
-
 }

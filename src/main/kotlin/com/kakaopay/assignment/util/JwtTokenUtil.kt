@@ -3,18 +3,15 @@ package com.kakaopay.assignment.util
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import java.util.*
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
-import java.util.*
-import java.util.function.Function
-import kotlin.reflect.KFunction1
-import java.util.HashMap
 
 @Component
 class JwtTokenUtil {
 
-    val validity = 5*60*60
+    val validity = 5 * 60 * 60
 
     @Value("\${jwt.secret}")
     val secretKey: String? = null
@@ -22,7 +19,7 @@ class JwtTokenUtil {
     fun getUsernameFromToken(token: String): String {
         return getAllClaimsFromToken(token).subject
     }
-    
+
     fun isTokenExpired(token: String): Boolean {
         return getExpirationDateFromToken(token).before(Date())
     }
@@ -42,8 +39,8 @@ class JwtTokenUtil {
 
     private fun doGenerateToken(claims: Map<String, Any>, subject: String): String {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(Date(System.currentTimeMillis()))
-                .setExpiration(Date(System.currentTimeMillis() + validity * 1000))
-                .signWith(SignatureAlgorithm.HS512, secretKey).compact()
+            .setExpiration(Date(System.currentTimeMillis() + validity * 1000))
+            .signWith(SignatureAlgorithm.HS512, secretKey).compact()
     }
 
     fun validateToken(token: String, userDetails: UserDetails): Boolean {
@@ -51,4 +48,3 @@ class JwtTokenUtil {
         return username == userDetails.getUsername() && !isTokenExpired(token)
     }
 }
-

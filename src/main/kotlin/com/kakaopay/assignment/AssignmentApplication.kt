@@ -9,5 +9,5 @@ import org.springframework.scheduling.annotation.EnableAsync
 class AssignmentApplication
 
 fun main(args: Array<String>) {
-	runApplication<AssignmentApplication>(*args)
+    runApplication<AssignmentApplication>(*args)
 }

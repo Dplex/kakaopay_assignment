@@ -1,6 +1,7 @@
 package com.kakaopay.assignment.config
 
 import com.zaxxer.hikari.HikariDataSource
+import javax.sql.DataSource
 import org.apache.ibatis.session.SqlSessionFactory
 import org.mybatis.spring.SqlSessionFactoryBean
 import org.mybatis.spring.SqlSessionTemplate
@@ -10,14 +11,13 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import javax.sql.DataSource
 
 @Configuration
-//@EnableJpaRepositories(
+// @EnableJpaRepositories(
 //        basePackages = arrayOf("com.kakaopay.assignment.repo"),
 //        entityManagerFactoryRef = "financeEntityManager",
 //        transactionManagerRef = "financeTransactionManager"
-//)
+// )
 @EnableTransactionManagement
 @MapperScan(basePackages = arrayOf("com.kakaopay.assignment.repo.mapper"))
 class FinanceDatasource(@Autowired val financeConfig: FinanceConfig) {
@@ -59,7 +59,7 @@ class FinanceDatasource(@Autowired val financeConfig: FinanceConfig) {
 //            it.jpaVendorAdapter = HibernateJpaVendorAdapter()
 //            it.setJpaPropertyMap(
 //                    HashMap<String, Any>().also { map ->
-////                        map.put("hibernate.hbm2ddl.auto", "true")
+// //                        map.put("hibernate.hbm2ddl.auto", "true")
 //                        map.put("hibernate.temp.use_jdbc_metadata_defaults", false)
 //                        map.put("hibernate.jdbc.lob.non_contextual_creation", true)
 //                        map.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect")
@@ -74,5 +74,4 @@ class FinanceDatasource(@Autowired val financeConfig: FinanceConfig) {
 //            it.entityManagerFactory = financeEntityManager().`object`
 //        }
 //    }
-
 }
