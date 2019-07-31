@@ -2,6 +2,7 @@ package com.kakaopay.assignment.service
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import org.junit.Assert
 import java.io.InputStream
 import java.nio.charset.Charset
 import org.junit.Before
@@ -20,24 +21,19 @@ class FileServiceTest {
     @Before
     fun init() {
         fileService = FileService()
-        inputStream = mock {
-            on { readBytes() }
-                .doReturn("1987, 8, 1, 2, 3, 4, 5, 6, 7, 8, 9".toByteArray(Charset.defaultCharset()))
-        }
-        file = mock {
-            on { inputStream }.doReturn(inputStream)
-        }
     }
 
     @Test
     fun parseCsvToStringLstTest1() {
 
         // given
-        val obj = fileService.parseCsvToStringLst(file)
+        val obj = fileService.convertFinanceVoLst(listOf("1987,8,1,2,3,4,5,6,7,8,9"))
 
-        print(obj)
         // when
+        print(obj)
+
 
         // then
+        Assert.assertTrue(1==1)
     }
 }
