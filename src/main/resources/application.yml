@@ -32,9 +32,12 @@ database:
   username: kakaoapp
   encPassword: 'WqtXLBNux+I7xZo6A12oqGko9JjckYyQ'
 
-secretKey: "/CipherSecretKey"
-
 ---
 spring:
   profiles:
-    active: dev
+    active: gcp
+
+database:
+  url: jdbc:postgresql://34.97.55.121:5432/kakaofinance
+  username: kakaoapp
+  encPassword: 'WqtXLBNux+I7xZo6A12oqGko9JjckYyQ'

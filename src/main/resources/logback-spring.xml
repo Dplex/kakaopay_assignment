@@ -38,6 +38,7 @@
                 <appender-ref ref="STDOUT" />
             </then>
             <else>
+                <appender-ref ref="STDOUT" />
                 <appender-ref ref="FILE_APPENDER" />
             </else>
         </if>

@@ -2,11 +2,9 @@ package com.kakaopay.assignment.rest.controller
 
 import com.kakaopay.assignment.config.FinanceConfig
 import com.kakaopay.assignment.const.PreditionType
+import com.kakaopay.assignment.const.ResponseType
 import com.kakaopay.assignment.const.UNKNOWN_CODE
-import com.kakaopay.assignment.rest.response.BankStatistics
-import com.kakaopay.assignment.rest.response.BankStatisticsResponse
-import com.kakaopay.assignment.rest.response.FinanceStatisticsResponse
-import com.kakaopay.assignment.rest.response.PredictionResponse
+import com.kakaopay.assignment.rest.response.*
 import com.kakaopay.assignment.service.FileService
 import com.kakaopay.assignment.service.FinanceService
 import com.kakaopay.assignment.service.PredictionService
@@ -26,14 +24,14 @@ class FinanceController(
 
     @PostMapping("/uploadHistory")
     @ResponseBody
-    fun uploadHistoryFile(@RequestParam("file") file: MultipartFile): ResponseEntity<String> {
+    fun uploadHistoryFile(@RequestParam("file") file: MultipartFile): ResponseEntity<SimpleResponse> {
         var historyLst = fileService.parseCsvToStringLst(file)
 
         var financeLst = fileService.convertFinanceVoLst(historyLst)
 
         financeService.saveFinaceLst(financeLst)
 
-        return ResponseEntity.ok(historyLst.size.toString())
+        return ResponseEntity(SimpleResponse(ResponseType.KAKAO_ACCEPTED), ResponseType.KAKAO_ACCEPTED.resultStatus)
     }
 
     @GetMapping("/statistics/summarize")

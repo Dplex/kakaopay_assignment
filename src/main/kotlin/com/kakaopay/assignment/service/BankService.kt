@@ -20,6 +20,6 @@ class BankService(
             Bank(it.bankCode, it.bankName)
         }.toList()
 
-        return ResponseEntity.ok(BanksResponse(bankLst, ResponseType.KAKAO_ACCEPTED))
+        return ResponseEntity.ok(BanksResponse(bankLst, ResponseType.KAKAO_SUCCESS))
     }
 }
