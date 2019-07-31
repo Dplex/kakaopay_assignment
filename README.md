@@ -359,3 +359,43 @@ CREATE SEQUENCE kakao_finance_be.tasur_hist_id_seq
 ALTER SEQUENCE kakao_finance_be.tasur_hist_id_seq
     OWNER TO kakaoapp;
 ```
+
+## 문제 해결
+
+- 보안
+
+    - username은 평문으로 저장 (추후 확장을 위해 DB JOIN키로 활용 할 가능성이 높아서 평문으로 저장.)
+    - password는 AES/GCM 으로 단일키 암호화
+    - signin/up API 호출시 validation 체크 후 JsonWebToken키를 발급.
+    - /api/v1 으로 시작하는 모든 API들은 JWT 토큰을 통해 접근하도록 RequestFilter security 적용
+    
+- Related DB...
+
+    - JPA를 고려하였으나 MyBatis로 적용 
+        - ###### (Data 성격상 통계를 사용하는 쿼리가 많을것으로 예상. JPA 보다는 집계함수를 사용하기 수월한 MyBatis 적용. )
+        - ###### (xml 로 쿼리를 작성하지 않고, 코드상에서 IBatis로 쿼리 작성. - Native 쿼리를 사용하지 않음. => 코드 재사용 가능.)
+        - ###### (Postgresql을 사용하다 보니 reference가 많이 없어 JPA 적용이 까다로웠던 점도 다소 있음.. TT)
+        
+    - DataSource(HikariCP)
+        - 스프링부트 디폴트인 HikariCP 적용
+        - DB 관련 Password 는 암호화(yaml 파일에 암호화 처리)
+        
+- 금융지원금액 예측
+    
+    - ML이 아닌 통계기반 예측 모델 적용
+        - 특정달의 평균에 해당하는 값
+        - 계절특성에 따라 계절별 평균에 해당하는 값
+        - 전체 금액중 해당은행의 금액이 차지하는 비중
+        - 위 통계값들을 가중치를 조절하는 방식과 물가 인상을 고려하여 물가 인상률의 평균을 구한 후
+        - 직전년도의 통계값에서 물가 인상률을 더한 방식 추가적으로 계산
+    
+    - 여러가지 예측 모델을 적용할수 있도록 설계
+        - API RequestParam을 통해 다른 알고리즘 적용 가능
+        - 현재는 단순 평균 모델과 위에서 설명한 모델이 적용되어 있음.
+        
+
+## 추가 고려한 사항
+- JENKINS를 통한 CI/CD 환경 구축 (Google Cloud Platform)
+- json 파일로 설정값들을 바꿀수 있도록 고려
+- application.yaml 파일에서 로컬 및 GCP DB를 사용할 수 있도록 분리
+
