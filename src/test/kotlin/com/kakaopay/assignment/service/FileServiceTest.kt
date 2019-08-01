@@ -31,7 +31,7 @@ class FileServiceTest {
 
 
         // when
-        val obj = fileService.convertFinanceVoLst(listOf())
+        val obj = fileService.convertFinanceVoLst(sampleString)
 
         // then
         Assert.assertTrue(obj.size == 9)

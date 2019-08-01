@@ -399,3 +399,25 @@ ALTER SEQUENCE kakao_finance_be.tasur_hist_id_seq
 - json 파일로 설정값들을 바꿀수 있도록 고려
 - application.yaml 파일에서 로컬 및 GCP DB를 사용할 수 있도록 분리
 
+
+## 실행방법 및 TEST
+- Postgresql을 위에 명시된 쿼리 스크립트를 통해 구축하여 실행
+    - Gradle build
+    - Run Spring Boot
+    
+- Postgresql을 직접 구축하지 않고 GCP에 설치되어있는 Postgresql을 통해 실행
+    - Gradle build
+    - Run Spring boot with Spring profiles => gcp
+        - IDE의 Active Profiles 설정을 이용.
+        - 직접실행 예시 : java -jar -Dspring.profiles.active=gcp {assignment-0.0.1-SNAPSHO.jar}
+        
+- API 확인
+    - http://localhost:8080/swagger-ui.html  swagger UI 확인
+    - git repo에 있는 KAKAO.postman_collection.json 확인
+        - swagger UI 보다는 json 파일을 Postman으로 Import 하는 방식 추천
+        - Postman 에서 토큰주입및 userId 생성 로직 스크립트화 되어 있음. 
+        
+    - Jenkins 대쉬보드를 통한 커버리지 및 정적분석 확인
+        * http://34.97.55.121
+        * dplex / !q2w3e4r
+        
