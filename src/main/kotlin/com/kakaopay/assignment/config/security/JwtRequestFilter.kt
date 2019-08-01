@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+import javax.servlet.ServletResponse
 
 @Component
 class JwtRequestFilter(
@@ -23,8 +24,6 @@ class JwtRequestFilter(
     private val cLogger = LoggerUtil.logger<JwtRequestFilter>()
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-        cLogger.debug("JHR : ${request.requestURI}")
-
         val requestTokenHeader = request.getHeader("Authorization")
 
         var username: String? = null
@@ -35,11 +34,14 @@ class JwtRequestFilter(
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken)
             } catch (e: IllegalArgumentException) {
-                println("Unable to get JWT Token")
+
+                cLogger.error("Unable to get JWT Token")
             } catch (e: ExpiredJwtException) {
-                println("JWT Token has expired")
+
+                cLogger.error("JWT Token has expired")
             }
         } else {
+
             logger.warn("JWT Token does not begin with Bearer String")
         }
 
@@ -48,19 +50,17 @@ class JwtRequestFilter(
 
             val userDetails = this.jwtUserDetailService.loadUserByUsername(username)
 
-            // if token is valid configure Spring Security to manually set authentication
             if (jwtTokenUtil.validateToken(jwtToken!!, userDetails!!)) {
 
                 val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities()
                 )
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                // After setting the Authentication in the context, we specify
-                // that the current user is authenticated. So it passes the Spring Security Configurations successfully.
+
                 SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
             }
         }
 
-        filterChain.doFilter(request, response)
+        filterChain.doFilter(request, response as ServletResponse?)
     }
 }

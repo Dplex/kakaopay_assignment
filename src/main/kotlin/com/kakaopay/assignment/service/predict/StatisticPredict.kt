@@ -6,8 +6,11 @@ import com.kakaopay.assignment.const.ResponseType
 import com.kakaopay.assignment.const.UNKNOWN_CODE
 import com.kakaopay.assignment.repo.model.FinanceVo
 import com.kakaopay.assignment.rest.response.PredictionResponse
+import com.kakaopay.assignment.util.LoggerUtil
 
 class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
+
+    val logger = LoggerUtil.logger<StatisticPredict>()
 
     var bankCode: String = UNKNOWN_CODE
     var month: Int = 0
@@ -42,6 +45,9 @@ class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
                 (seasonPrediction * predictionWeight[1]) +
                 (piePercentagePrediction * predictionWeight[2])
             ) / predictionWeight.sum()
+
+        logger.info("average : $eachYearPrediction / season_average : $seasonPrediction " +
+                "/ pie_average = $piePercentagePrediction / prediction : ${predictionPrice}")
 
         return PredictionResponse(
             BankType.getBankName(bankCode),
@@ -89,14 +95,11 @@ class StatisticPredict(financeConfig: FinanceConfig) : IPredict(financeConfig) {
                 vo.bankType == bankCode && targetYear - vo.year <= yearDuration && vo.month == month
             }
             .sortedBy { it.year }.map { it.assurancePrice }
-        print(eachYearPrice)
         return getWeightAverageByLast(eachYearPrice.toList(), averageDeltaValues)
     }
 
     private fun getWeightAverageByLast(priceLst: List<Int>, weightValues: List<Int>): Double {
         var deltaValue = 0.0
-        println(priceLst)
-        println(weightValues)
         for ((index, value) in weightValues.withIndex()) {
             deltaValue += value * (priceLst[index + 1] * 1.0 / priceLst[index])
         }

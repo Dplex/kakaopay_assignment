@@ -1,6 +1,7 @@
 package com.kakaopay.assignment.rest.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.kakaopay.assignment.const.ResponseType
 
 data class FinanceStatisticsResponse(
     val name: String,
@@ -21,8 +22,9 @@ data class DetailStatistics(
 
 data class BankStatisticsResponse(
     val bank: String,
-    val support_amount: List<BankStatistics>
-)
+    val support_amount: List<BankStatistics>,
+    val responseType: ResponseType
+) : APIResponse(responseType)
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class BankStatistics(

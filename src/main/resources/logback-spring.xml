@@ -32,7 +32,7 @@
         </rollingPolicy>
     </appender>
 
-    <root level="${LOG_LEVEL}">
+    <root level="INFO">
         <if condition='property("spring.profiles.active").startsWith("local") || property("spring.profiles.active").equals("")'>
             <then>
                 <appender-ref ref="STDOUT" />

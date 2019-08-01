@@ -3,6 +3,7 @@ package com.kakaopay.assignment.service
 import com.kakaopay.assignment.config.FinanceConfig
 import com.kakaopay.assignment.repo.mapper.UserMapper
 import com.kakaopay.assignment.repo.model.UserVo
+import com.kakaopay.assignment.util.LoggerUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -15,9 +16,12 @@ class JwtUserDetailService(
     @Autowired val userMapper: UserMapper
 ) : UserDetailsService {
 
+    val logger = LoggerUtil.logger<JwtUserDetailService>()
+
     override fun loadUserByUsername(username: String): UserDetails? {
         val user = userMapper.getUser(username)
         if (user == null) {
+            logger.error("$username user not registed.")
             return null
         }
 
@@ -39,6 +43,7 @@ class JwtUserDetailService(
                 }
             }
         }
+        logger.error("user : $username not valid")
         return null
     }
 }

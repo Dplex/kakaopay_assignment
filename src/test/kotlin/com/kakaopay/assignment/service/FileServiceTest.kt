@@ -27,13 +27,14 @@ class FileServiceTest {
     fun parseCsvToStringLstTest1() {
 
         // given
-        val obj = fileService.convertFinanceVoLst(listOf("1987,8,1,2,3,4,5,6,7,8,9"))
+        val sampleString = listOf("1987,8,1,2,3,4,5,6,7,8,9")
+
 
         // when
-        print(obj)
-
+        val obj = fileService.convertFinanceVoLst(listOf())
 
         // then
-        Assert.assertTrue(1==1)
+        Assert.assertTrue(obj.size == 9)
+        Assert.assertTrue(obj.stream().allMatch{ t -> t.year == 1987 && t.month == 8})
     }
 }

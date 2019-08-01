@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class JwtTokenUtil {
 
+    val logger = LoggerUtil.logger<JwtTokenUtil>()
+
     val validity = 5 * 60 * 60
 
     @Value("\${jwt.secret}")
@@ -26,7 +28,9 @@ class JwtTokenUtil {
 
     fun generateToken(userDetails: UserDetails): String {
         val claims = HashMap<String, Any>()
-        return doGenerateToken(claims, userDetails.getUsername())
+        val token = doGenerateToken(claims, userDetails.getUsername())
+        logger.info("userDetails : ${userDetails} / token : ${token}}")
+        return token
     }
 
     private fun getExpirationDateFromToken(token: String): Date {

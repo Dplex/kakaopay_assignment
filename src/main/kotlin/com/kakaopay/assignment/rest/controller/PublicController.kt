@@ -1,5 +1,6 @@
 package com.kakaopay.assignment.rest.controller
 
+import com.kakaopay.assignment.config.FinanceConfig
 import com.kakaopay.assignment.const.ResponseType
 import com.kakaopay.assignment.rest.request.UserRequest
 import com.kakaopay.assignment.rest.response.SimpleResponse
@@ -9,16 +10,14 @@ import com.kakaopay.assignment.util.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController()
 @RequestMapping("/public")
 class PublicController(
     @Autowired val jwtTokenUtil: JwtTokenUtil,
-    @Autowired val jwtUserDetailService: JwtUserDetailService
+    @Autowired val jwtUserDetailService: JwtUserDetailService,
+    @Autowired val financeConfig: FinanceConfig
 ) {
 
     @PostMapping("/signup")
@@ -50,5 +49,12 @@ class PublicController(
         ResponseType.KAKAO_BAD_REQUEST.run {
             return ResponseEntity(SimpleResponse(this), this.resultStatus)
         }
+    }
+
+    @GetMapping("/reload")
+    fun reloadConfiguration(): ResponseEntity<SimpleResponse> {
+        financeConfig.reload()
+
+        return ResponseEntity(SimpleResponse(ResponseType.KAKAO_ACCEPTED), ResponseType.KAKAO_ACCEPTED.resultStatus)
     }
 }

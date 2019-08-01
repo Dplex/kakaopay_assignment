@@ -3,6 +3,7 @@ package com.kakaopay.assignment.service
 import com.kakaopay.assignment.const.BankType
 import com.kakaopay.assignment.const.Contant
 import com.kakaopay.assignment.repo.model.FinanceVo
+import com.kakaopay.assignment.util.LoggerUtil
 import java.io.BufferedInputStream
 import java.nio.charset.Charset
 import kotlin.streams.toList
@@ -11,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile
 
 @Service
 class FileService {
+
+    val logger = LoggerUtil.logger<FileService>()
 
     fun parseCsvToStringLst(file: MultipartFile): MutableList<String> {
         BufferedInputStream(file.inputStream).readBytes()
@@ -32,6 +35,8 @@ class FileService {
                 for ((idx, value) in bankLst.withIndex()) {
                     financeLst.add(FinanceVo(year.toInt(), month.toInt(), value.bankCode, rowLst[idx + 2].toInt()))
                 }
+            } else {
+                logger.error("rowList length is not 11 -> ${rowLst.size}")
             }
             financeLst
         }.toList().flatten()

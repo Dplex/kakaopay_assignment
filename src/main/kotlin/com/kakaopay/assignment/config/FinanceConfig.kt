@@ -43,7 +43,7 @@ class FinanceConfig() {
         }
     }
 
-    private fun reload() {
+    fun reload() {
         ObjectMapper().run {
             val tempConfiguration =
                 this.readValue(InputStreamReader(configResouce!!.inputStream), Configuration::class.java)
